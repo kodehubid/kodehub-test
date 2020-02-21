@@ -1,7 +1,7 @@
 'use strict';
 
 import { ForbiddenError } from 'apollo-server';
-import { combineResolvers, skip } from 'graphql-resolvers';
+import { skip } from 'graphql-resolvers';
 
 export const isAdmin = (parent, args, { me: { role } }) => {
   return role === 'ADMIN'

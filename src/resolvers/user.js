@@ -68,7 +68,7 @@ export default {
   },
   User: {
     messages: async (user, args, { loaders }) => {
-      return await loaders.message.load( user.id );
+      return (await loaders.message.load(user.id)) || [];
     }
   }
 };

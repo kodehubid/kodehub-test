@@ -5,14 +5,13 @@ import { ApolloServer } from 'apollo-server-express';
 import { AuthenticationError } from 'apollo-server';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
-import depthLimit from 'graphql-depth-limit'
+import depthLimit from 'graphql-depth-limit';
 import schema from './schema';
 import resolvers from './resolvers';
 import models, { connectDb } from './models';
-import { getMaxListeners } from 'cluster';
 import DataLoader from 'dataloader';
 
-const dev = process.env.NODE_ENV === 'development'
+const dev = process.env.NODE_ENV === 'development';
 const port = process.env.PORT || 8080;
 const app = express();
 app.use(cors());
@@ -46,7 +45,7 @@ const getMe = async req => {
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  validationRules: [ depthLimit(process.env.GRAPHQL_DEPTH_LIMIT || 10) ],
+  validationRules: [depthLimit(process.env.GRAPHQL_DEPTH_LIMIT || 10)],
   introspection: dev ? true : false,
   context: async ({ req, connection }) => {
     // create context for Subscription
@@ -87,7 +86,7 @@ connectDb().then(async () => {
     await createUsersWithMessages();
   }
   httpServer.listen({ port }, () => {
-    console.log(`Apollo Server on http://localhost:${port}/graphql`);
+    console.log(`Apollo Server on http://localhost:${ port }/graphql`);
   });
 });
 

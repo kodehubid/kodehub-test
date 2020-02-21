@@ -15,8 +15,8 @@ export default {
     ) => {
       const cursorOptions = cursor
         ? {
-            createdAt: { $lt: fromCursorHash(cursor) }
-          }
+          createdAt: { $lt: fromCursorHash(cursor) }
+        }
         : {};
       const findOptions = { limit: limit + 1, sort: orderBy };
       if (offset) {

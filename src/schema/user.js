@@ -1,10 +1,10 @@
-'use strict'
+'use strict';
 
 import { gql } from 'apollo-server';
 
 export default gql`
   extend type Query {
-    users: [User!]
+    users: [User!]!
     user(id: ID): User
     me: User
   }
