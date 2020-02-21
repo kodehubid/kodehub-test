@@ -5,29 +5,18 @@ import { ApolloServer } from 'apollo-server-express';
 import { AuthenticationError } from 'apollo-server';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
+import depthLimit from 'graphql-depth-limit'
 import schema from './schema';
 import resolvers from './resolvers';
 import models, { connectDb } from './models';
 import { getMaxListeners } from 'cluster';
 import DataLoader from 'dataloader';
 
+const dev = process.env.NODE_ENV === 'development'
 const port = process.env.PORT || 8080;
 const app = express();
 app.use(cors());
 
-const batchUsers = async (keys, models) => {
-  const users = await models.User.find({
-    _id: {
-      $in: keys
-    }
-  });
-  const dataMap = users.reduce((acc, obj) => {
-    acc[obj._id] = obj;
-    return acc;
-  }, {});
-  const batchedUser = keys.map(key => dataMap[key]);
-  return batchedUser;
-};
 const batchMessages = async (keys, models) => {
   const messages = await models.Message.find({
     user: {
@@ -57,10 +46,14 @@ const getMe = async req => {
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
+  validationRules: [ depthLimit(process.env.GRAPHQL_DEPTH_LIMIT || 10) ],
+  introspection: dev ? true : false,
   context: async ({ req, connection }) => {
+    // create context for Subscription
     if (connection) {
       return { models };
     }
+    // create context for general graphql Query & Mutation
     if (req) {
       const me = await getMe(req);
       return {
@@ -68,7 +61,6 @@ const server = new ApolloServer({
         me,
         secret: process.env.SECRET,
         loaders: {
-          user: new DataLoader(keys => batchUsers(keys, models)),
           message: new DataLoader(keys => batchMessages(keys, models))
         }
       };
@@ -96,7 +88,6 @@ connectDb().then(async () => {
   }
   httpServer.listen({ port }, () => {
     console.log(`Apollo Server on http://localhost:${port}/graphql`);
-    // createUsersWithMessages() // use this to seed
   });
 });
 
