@@ -76,7 +76,8 @@ server.installSubscriptionHandlers(httpServer);
  * Connect to the database and start the server up
  */
 connectDb().then(async () => {
-  const isTest = process.env.TEST_DB;
+  const isTest = process.env.NODE_ENV === 'test';
+  console.log('TCL: isTest', isTest);
   if (isTest) {
     // clear db
     await Promise.all([
@@ -92,9 +93,9 @@ connectDb().then(async () => {
 
 async function createUsersWithMessages() {
   const user1 = new models.User({
-    username: 'rwieruch',
+    username: 'awesomeuser',
     createdAt: Date.now(),
-    email: 'rwi@getMaxListeners.com',
+    email: 'rwi@awesomeuser.com',
     password: 'password123',
     _id: '5e4e555cbf31ef2588e22124',
     role: 'USER'
@@ -102,7 +103,7 @@ async function createUsersWithMessages() {
   const user2 = new models.User({
     username: 'arrlancore',
     createdAt: Date.now(),
-    email: 'ar@getMaxListeners.com',
+    email: 'ar@awesomeuser.com',
     password: 'password123',
     _id: '5e4e555cbf31ef2588e22125',
     role: 'ADMIN'
