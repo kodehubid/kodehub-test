@@ -51,5 +51,4 @@ export default gql`
   type MessageCreated {
     message: Message!
   }
-
 `;

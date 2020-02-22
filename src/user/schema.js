@@ -44,7 +44,7 @@ export default gql`
     role: UserRoles
   }
 
-  enum UserRoles{
+  enum UserRoles {
     ADMIN
     USER
   }

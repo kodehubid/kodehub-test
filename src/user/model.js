@@ -66,6 +66,13 @@ userSchema.pre('save', async function saveUser(next) {
   next();
 });
 
+userSchema.pre('findById', async function saveUser(next) {
+  // set hash for password
+  console.log('post find by id');
+
+  next();
+});
+
 userSchema.pre('remove', function(next) {
   this.model('Message').deleteMany({ user: this._id }, next);
 });
