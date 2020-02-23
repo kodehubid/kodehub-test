@@ -10,8 +10,8 @@ export const createToken = async (user, secret, expiresTime) => {
   });
 };
 
-export const getUserByToken = async req => {
-  const token = req.headers['x-token'];
+export const getUserByToken = async headers => {
+  const token = headers['x-token'];
   if (token) {
     try {
       const user = await jwt.verify(token, process.env.SECRET);

@@ -1,7 +1,12 @@
-import { validateSignIn } from '../validator';
+import {
+  validateSignIn,
+  validateSignInInput,
+  validateFieldPassword
+} from '../validator';
 import utils from '../../shared/utils';
 
 export const signUpResolver = async (parent, { input }, { models, secret }) => {
+  await validateFieldPassword(input.password);
   const user = await models.User.create(input);
   return { token: utils.createToken(user, secret) };
 };
@@ -11,8 +16,9 @@ export const signInResolver = async (
   { login, password },
   { models, secret }
 ) => {
+  await validateSignInInput(login, password);
   const user = await models.User.findByLogin(login);
-  validateSignIn(user, password);
+  await validateSignIn(user, password);
   return { token: utils.createToken(user, secret) };
 };
 

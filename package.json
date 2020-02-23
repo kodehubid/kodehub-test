@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app/index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/app/index.js",
+    "start": "nodemon --watch src --exec babel-node src/app/server.js",
     "start:prod": "cross-env NODE_ENV=production npm start",
     "test": "jest --coverage",
     "test:watch": "jest --watch --coverage",
@@ -32,6 +32,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.1",
     "morgan": "^1.9.1",
+    "password-validator": "^5.0.3",
     "remove": "^0.1.5",
     "uuid": "^3.4.0"
   },

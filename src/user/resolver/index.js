@@ -13,7 +13,7 @@ const userResolvers = {
   Query: {
     users: usersResolver,
     user: userResolver,
-    me: myProfileResolver
+    myProfile: myProfileResolver
   },
   Mutation: {
     signUp: signUpResolver,

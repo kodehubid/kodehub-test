@@ -1,10 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`user(id: String!): User returns a user when user can be found 1`] = `
+exports[`user(id: String!): User returns a user when user exist 1`] = `
 Object {
   "data": Object {
     "user": Object {
       "id": "5e4e555cbf31ef2588e22124",
+      "role": "USER",
       "username": "awesomeuser",
     },
   },

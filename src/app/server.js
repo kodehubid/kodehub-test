@@ -9,6 +9,7 @@ import configs from './configs';
 import handleNodeEvent from './event-handler';
 
 const APP_PORT = normalizePort(configs.app.port);
+const APP_ENV = process.env.NODE_ENV;
 
 // create an apollo server
 const server = new ApolloServer(apolloServerConfig());
@@ -24,22 +25,21 @@ server.installSubscriptionHandlers(httpServer);
 /**
  * Start the server up
  */
-async function startServer() {
+(async function startServer() {
   try {
     // connecting to database..
     const mongoose = await connectToDatabase();
     // starting an http server listen by port
-    const server = httpServer.listen({ port: APP_PORT }, () => {
+    const httpServerConnect = httpServer.listen({ port: APP_PORT }, () => {
+      const address = httpServerConnect.address();
       console.log(
-        `Apollo Server running on http://localhost:${ APP_PORT }${ GRAPHQL_PATH }`
+        `Apollo Server ${ APP_ENV } running on http://localhost:${ address.port }${ GRAPHQL_PATH }`
       );
     });
     // handler for application level event
-    handleNodeEvent(server, mongoose);
+    handleNodeEvent(httpServerConnect, mongoose);
   } catch (error) {
     console.error('>>>', error.message);
     console.info(error.stack);
   }
-}
-
-startServer();
+})();

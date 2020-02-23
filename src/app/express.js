@@ -3,14 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 450 // limit each IP to 450 requests per windowMs (30 request / minute)
-});
+import configs from './configs';
 
 // init the express app
 const app = express();
+// create a limiter middleware
+const limiter = rateLimit(configs.express.requestLimit);
 
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 // see https://expressjs.com/en/guide/behind-proxies.html

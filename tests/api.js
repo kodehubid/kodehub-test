@@ -7,11 +7,25 @@ export const user = async variables =>
       query ($id: ID!) {
         user(id: $id) {
           id
+          role
           username
         }
       }
     `,
     variables
+  });
+
+export const users = async () =>
+  axios.post(API_URL, {
+    query: `
+      query {
+        users {
+          id
+          role
+          username
+        }
+      }
+    `
   });
 
 export const signIn = async variables =>
@@ -25,7 +39,7 @@ export const signIn = async variables =>
     `,
     variables
   });
-  
+
 export const deleteUser = async (variables, token) =>
   axios.post(
     API_URL,

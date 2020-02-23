@@ -3,9 +3,9 @@ import pubsub, { EVENTS } from '../../shared/subscriptions';
 export const createMessageResolver = async (
   parent,
   { text },
-  { models, me }
+  { models, user }
 ) => {
-  const message = await models.Message.create({ text, user: me.id });
+  const message = await models.Message.create({ text, user: user.id });
   pubsub.publish(EVENTS.MESSAGE.CREATED, {
     messageCreated: { message }
   });

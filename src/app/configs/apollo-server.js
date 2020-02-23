@@ -19,11 +19,14 @@ const dev = process.env.NODE_ENV === 'development';
 // Introspection information at the GraphQL Playground (UI)
 const introspection = dev ? true : false;
 
-const customScalars = {
-  EmailAddress: EmailAddressResolver,
-  DateTime: DateTimeResolver
-};
-const customsTypeScalars = [EmailAddressTypeDefinition, DateTimeTypeDefinition];
+const customResolverScalars = [
+  { EmailAddress: EmailAddressResolver },
+  { DateTime: DateTimeResolver }
+];
+const customTypeDefScalars = [
+  EmailAddressTypeDefinition,
+  DateTimeTypeDefinition
+];
 
 /**
  * modularize the GraphQL schema by domains
@@ -42,18 +45,26 @@ const linkSchema = gql`
   }
 `;
 
+const typeDefs = [
+  ...customTypeDefScalars,
+  linkSchema,
+  user.userSchema,
+  message.messageSchema
+];
+
+const resolvers = [
+  ...customResolverScalars,
+  user.userResolver,
+  message.messageResolver
+];
+
 const apolloServerConfig = () => {
   return {
-    typeDefs: [
-      ...customsTypeScalars,
-      linkSchema,
-      user.userSchema,
-      message.messageSchema
-    ],
-    resolvers: [customScalars, user.userResolver, message.messageResolver],
-    validationRules: [depthLimit(process.env.GRAPHQL_DEPTH_LIMIT || 7)],
+    typeDefs,
+    resolvers,
     introspection,
-    context: createContext
+    context: createContext,
+    validationRules: [depthLimit(process.env.GRAPHQL_DEPTH_LIMIT || 7)]
   };
 };
 
@@ -65,10 +76,10 @@ async function createContext({ req, connection }) {
   }
   // create context for general graphql query & mutation
   if (req) {
-    const user = await getUserByToken(req);
+    const user = await getUserByToken(req.headers);
     return {
       models,
-      me: user,
+      user,
       secret: process.env.SECRET,
       loaders: allDataLoader(models)
     };

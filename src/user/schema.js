@@ -6,7 +6,7 @@ export default gql`
   extend type Query {
     users: [User!]!
     user(id: ID): User
-    me: User
+    myProfile: User
   }
   extend type Mutation {
     signUp(input: UserCreateInput!): Token!
