@@ -11,14 +11,14 @@ import { isAuthenticated, isAdmin } from '../../shared/resolvers/authorization';
 
 const userResolvers = {
   Query: {
-    users: usersResolver,
-    user: userResolver,
-    myProfile: myProfileResolver
+    users: combineResolvers(isAuthenticated, usersResolver),
+    user: combineResolvers(isAuthenticated, userResolver),
+    myProfile: combineResolvers(isAuthenticated, myProfileResolver)
   },
   Mutation: {
     signUp: signUpResolver,
     signIn: signInResolver,
-    updateUser: updateUserResolver,
+    updateUser: combineResolvers(isAuthenticated, updateUserResolver),
     deleteUser: combineResolvers(isAuthenticated, isAdmin, deleteUserResolver)
   },
   User: {

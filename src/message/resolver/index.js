@@ -15,8 +15,8 @@ import utils from '../../shared/utils';
 
 const messageResolvers = {
   Query: {
-    messages: messagesResolver,
-    message: messageResolver
+    messages: combineResolvers(isAuthenticated, messagesResolver),
+    message: combineResolvers(isAuthenticated, messageResolver)
   },
   Mutation: {
     createMessage: combineResolvers(isAuthenticated, createMessageResolver),
@@ -25,10 +25,10 @@ const messageResolvers = {
       isMessageOwner,
       deleteMessageResolver
     ),
-    updateMessage: updateMessageResolver
+    updateMessage: combineResolvers(isAuthenticated, updateMessageResolver)
   },
   Subscription: {
-    messageCreated: messageCreatedResolver
+    messageCreated: combineResolvers(isAuthenticated, messageCreatedResolver)
   },
   MessageConnection: {
     totalCount: (parent, args, { models }) => {
