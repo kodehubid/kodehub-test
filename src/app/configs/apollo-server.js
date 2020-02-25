@@ -1,6 +1,6 @@
 'use strict';
 import depthLimit from 'graphql-depth-limit';
-import allDataLoader from '../../shared/dataloaders';
+import allDataLoader from '../dataloaders';
 import { getUserByToken } from '../../shared/utils/jwt';
 import { gql } from 'apollo-server-express';
 import models from '../models';

@@ -39,9 +39,11 @@ const messageResolvers = {
     id: message => {
       return message._id.toString();
     },
-    user: (message, args, { models }) => {
+    user: async (message, args, { models }) => {
       const isObjectId = utils.objectIdValid.test(message.user);
-      return isObjectId ? models.User.findById(message.user) : message.user;
+      return isObjectId
+        ? await models.User.findById(message.user)
+        : message.user;
     }
   }
 };

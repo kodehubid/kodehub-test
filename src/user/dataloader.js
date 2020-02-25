@@ -6,8 +6,8 @@ export const batchUserMessage = async (keys, models) => {
       $in: keys
     }
   });
-  const dataMap = messages.reduce((acc, obj) => {
-    acc[obj.user] = [...(acc[obj.user] || []), obj];
+  const dataMap = messages.reduce((acc, message) => {
+    acc[message.user] = [...(acc[message.user] || []), message];
     return acc;
   }, {});
   const batchedMessage = keys.map(key => dataMap[key]);
